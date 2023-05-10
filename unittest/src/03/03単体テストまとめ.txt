@@ -1,0 +1,35 @@
+Jestでの単体まとめ(matcher)
+
+toBe(expected): 期待値が厳密に一致するかどうかをチェックします。
+toEqual(expected): 期待値がオブジェクトのプロパティ、値、およびメソッドのすべてについて等しいかどうかをチェックします。
+toBeNull(): 値がnullであることをチェックします。
+toBeUndefined(): 値がundefinedであることをチェックします。
+toBeTruthy(): 値が真であることをチェックします。
+toBeFalsy(): 値が偽であることをチェックします。
+toContain(expected): 配列または文字列が、指定された値を含んでいるかどうかをチェックします。
+toThrow(): 関数が例外をスローするかどうかをチェックします。
+
+【toBeとtoEqualの違い】
+
+toBeは、値の比較に厳密な一致（strict equality）を使用します。つまり、2つの値が厳密に同じ型であり、同じ値を持つ場合にマッチします。例えば、以下のコードは、toBeマッチャーによってパスします。
+
+test('2 plus 2 equals 4', () => {
+  expect(2 + 2).toBe(4);
+});
+しかし、以下のコードはパスしません。これは、toBeが厳密な一致をチェックするため、異なる型の値であるためです。
+test('2 plus 2 equals "4"', () => {
+  expect(2 + 2).toBe("4");
+});
+
+一方、toEqualは、値の比較に再帰的な等価性（recursive equality）を使用します。つまり、2つの値が等価であればマッチします。例えば、以下のコードは、toEqualマッチャーによってパスします。
+
+test('Object assignment', () => {
+  const data = {one: 1};
+  data['two'] = 2;
+  expect(data).toEqual({one: 1, two: 2});
+});
+このテストでは、dataオブジェクトが2つのプロパティを持つように更新され、toEqualは再帰的な等価性を使用して、オブジェクトが等しいことを検証します。これは、厳密な一致を必要としないため、以下のようなテストでもパスします。
+
+test('2 plus 2 equals "4"', () => {
+  expect(2 + 2).toEqual("4");
+});
